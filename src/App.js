@@ -1,26 +1,46 @@
 import React from 'react';
-import logo from './logo.svg';
+
 import './App.css';
 
-function App() {
+class App extends React.Component {
+  state = {
+    count:["0"],
+    keys: [
+      {value:"clear", styleName: "clearButton"}
+    ]
+  };
+  handleButton = (value) => {
+    if(value === "Clear"){
+      this.setState({count: ["0"]})
+    }else if (value === "="){
+      this.setState(prevState => ({
+        count: [eval(prevState.count.join(""))]
+      }))
+    } else{
+      this.setState(prevState => ({
+        count: [...prevState.count, value]
+      }))
+    }
+  }
+
+  render() {
+    let array = ["Clear","/", "7", "8", "9", "*", "4", "5", "6", "-", "1", "2","3","+", "0", "="]
+    return (
+      <div>
+        <h1>{this.state.count}</h1>
+        {array.map(value => {
+          return ( <Button  handleButton = {this.handleButton} display = {value}/>
+        )})}
+       
+      </div>
+     );
+  }
+  
+}
+const Button = (props) =>{
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <button onClick={() => props.handleButton(props.display)}>{props.display}</button>
+  )
 }
 
 export default App;
